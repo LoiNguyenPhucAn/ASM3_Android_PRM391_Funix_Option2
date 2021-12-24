@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+    tools:openDrawer="start">
+
+    <LinearLayout
+        android:id="@+id/host_content_with_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"/>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_bar_item_icon_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_title_animal" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:columnCount="1"
+                android:rowCount="3">
+
+
+                <!--                Row 1-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/itemSea_card"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:clickable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/border_bottom"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_item_sea" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/title_item_Sea"
+                            android:textColor="@color/orange_700"
+                            android:textSize="36sp" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!--                Row 2-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/itemMammal_card"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:clickable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/border_bottom"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_item_mammal" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/title_item_mammal"
+                            android:textColor="@color/orange_700"
+                            android:textSize="36sp" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!--                Row 3-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/itemBird_card"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:clickable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_item_sea" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/title_item_Bird"
+                            android:textColor="@color/orange_700"
+                            android:textSize="36sp" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+            </GridLayout>
+
+
+        </LinearLayout>
+    </com.google.android.material.navigation.NavigationView>
+
+</androidx.drawerlayout.widget.DrawerLayout>

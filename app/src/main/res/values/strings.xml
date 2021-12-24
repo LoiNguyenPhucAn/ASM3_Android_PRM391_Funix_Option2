@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Animal</string>
+    <string name="title_item_Sea">Sea</string>
+    <string name="title_item_mammal">Mammal</string>
+    <string name="title_item_Bird">Bird</string>
+    <string name="open">OpenDrawerLayout</string>
+    <string name="close">CloseDrawerLayout</string>
+    <string name="folder_icon_sea">sea</string>
+    <string name="folder_icon_mammal">mammal</string>
+    <string name="folder_icon_bird">bird</string>
+</resources>
