@@ -52,7 +52,12 @@ public class RecyclerAdapterView extends RecyclerView.Adapter<RecyclerAdapterVie
          * ngoài ra thì ẩn icon heart
          * */
 
-        if (tagPref.contains("filled")) {
+	if (tagPref == null) {
+
+            holder.heart.setVisibility(View.GONE);
+            listRecycV.get(position).setTag("nonefillcolor");
+
+        } else if (tagPref.contains("filled")) {
 
             /** setVisibility()
              * View.GONE This view is invisible, and it doesn't take any space for layout purposes.
