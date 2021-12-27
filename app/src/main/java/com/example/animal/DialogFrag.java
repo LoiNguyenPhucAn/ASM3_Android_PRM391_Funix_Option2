@@ -16,21 +16,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import java.util.ArrayList;
-
 public class DialogFrag extends DialogFragment {
 
     Context mContext;
     ImageView ivIcon;
     EditText phoneNumberTextField;
     private AnimalType animalInfo;
-    private int position;
     private TextView tvPhoneNumber;
 
-    public DialogFrag( Context mContext, AnimalType animalInfo, int position, TextView tvPhoneNumber) {
+    public DialogFrag( Context mContext, AnimalType animalInfo, TextView tvPhoneNumber) {
         this.mContext = mContext;
         this.animalInfo = animalInfo;
-        this.position = position;
         this.tvPhoneNumber = tvPhoneNumber;
     }
 
@@ -59,32 +55,38 @@ public class DialogFrag extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setView(viewDialog)
-                //Add button on dialog
+                //Add SAVE button on dialog
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        String iconBitmapPath = animalInfo.getIconBitmapPath();
                         String phoneNumber = phoneNumberTextField.getText().toString();
                         tvPhoneNumber.setText(phoneNumber);
-
+                        //lưu phone number vào sharedPreference với key là titleIcon, value là phone number
                         phoneNumberSharedPref.edit().putString(titleIcon, phoneNumber).commit();
+                        //lưu phone number vào sharedPreference với key là phonenumber, value là path chỉ đến vị trí lưu hình ảnh bitmap icon
+                        phoneNumberSharedPref.edit().putString(phoneNumber,iconBitmapPath).commit();
 
                     }
                 })
+                //Add DELETE button on dialog
                 .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                         tvPhoneNumber.setText("");
                         DialogFrag.this.getDialog().cancel();
-
+                        //Tìm titleIcon key trong SharedPreferences
+                        // khi tồn tại key thì giá trí trả về là value do đó biến keyPref != null
+                        // thì thực hiện xoá dữ liệu với key tương ứng trong SharedPreferences.
                         String keyPref = phoneNumberSharedPref.getString(titleIcon, null);
                         if (keyPref != null) {
+                            phoneNumberSharedPref.edit().remove(keyPref).commit();
                             phoneNumberSharedPref.edit().remove(titleIcon).commit();
+
                         }
                     }
                 });
-
         return builder.create();
     }
 }

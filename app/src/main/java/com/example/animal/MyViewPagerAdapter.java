@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.PagerAdapter;
@@ -52,7 +51,8 @@ public class MyViewPagerAdapter extends PagerAdapter {
 
         SharedPreferences phoneNumberSharedPref = mContext.getSharedPreferences(MainActivity.SAVE_PREF_DIALOG_PHONE_NUMBER, Context.MODE_PRIVATE);
         String fillPhoneNumber = phoneNumberSharedPref.getString(animalInfo.getTitle(), null);
-        if (animalInfo.getTitle()!=null){
+
+        if (animalInfo.getTitle() != null) {
             tvPhoneNumber.setText(fillPhoneNumber);
         }
 
@@ -69,24 +69,21 @@ public class MyViewPagerAdapter extends PagerAdapter {
          * Nếu dữ liệu nhận được là "nonfillcolor" thì fill icon heart, thay giá trị "nonefillcolor" bằng "filled" và lưu lại SharedPreferences.
          * Nếu dữ liệu nhận được là "filled" thì chuyển thành icon heart none fill, thay giá trị "filled" bằng "nonefillcolor" và lưu lại SharedPreferences.
          * */
+
+        //Xử lý click lên icon heart thì fill color, click again thì none fill color
         heart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences pref = mContext.getSharedPreferences(MainActivity.SAVE_PREF_HEART_FLAG, Context.MODE_PRIVATE);
-
                 String tagPref = pref.getString(title.getText().toString(), null);
-
                 if (tagPref == null) {
-                    Toast.makeText(mContext, "tagPref in SharedPreferences is null", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "tagPref in SharedPreferences is null", Toast.LENGTH_SHORT).show();
                     heart.setImageDrawable(mContext.getDrawable(R.drawable.heart_button_filled));
                     tagPref = "filled";
                     pref.edit().putString(animalInfo.getTitle(), tagPref).commit();
                 } else if (tagPref.contains("nonefillcolor")) {
-
                     heart.setImageDrawable(mContext.getDrawable(R.drawable.heart_button_filled));
-
                     String s = tagPref.replace("nonefillcolor", "filled");
-
                     //https://developer.android.com/training/data-storage/shared-preferences#WriteSharedPreference
                     /** To write to a shared preferences file, create a SharedPreferences.Editor by calling edit() on SharedPreferences Object
                      * apply() changes the in-memory SharedPreferences object immediately but writes the updates to disk asynchronously.
@@ -94,33 +91,29 @@ public class MyViewPagerAdapter extends PagerAdapter {
                      * commit() to write the data to disk synchronously. But because commit() is synchronous, you should avoid calling it from your main thread because it could pause your UI rendering.
                      * */
                     pref.edit().putString(animalInfo.getTitle(), s).commit();
-
                 } else {
-
                     heart.setImageDrawable(mContext.getDrawable(R.drawable.heart_button));
-
                     String s = tagPref.replace("filled", "nonefillcolor");
-
                     pref.edit().putString(animalInfo.getTitle(), s).commit();
                 }
             }
         });
 
 
+        // Xử lý click icon phone hiển thị dialogue để nhập vào số điện thoại
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // show dialog fragment from adapter
                 FragmentActivity activity = (FragmentActivity) (mContext);
                 FragmentManager fragManager = activity.getSupportFragmentManager();
-                DialogFrag dialogObject = new DialogFrag(mContext, animalInfo, position,tvPhoneNumber);
+                DialogFrag dialogObject = new DialogFrag(mContext, animalInfo, tvPhoneNumber);
                 dialogObject.show(fragManager, "PhoneNumberDiaglogueFragment");
             }
         });
-
         return v;
     }
+
 
     @Override
     public int getCount() {
@@ -136,5 +129,4 @@ public class MyViewPagerAdapter extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
-
 }

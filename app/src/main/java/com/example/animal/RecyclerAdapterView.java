@@ -21,7 +21,6 @@ public class RecyclerAdapterView extends RecyclerView.Adapter<RecyclerAdapterVie
     private Context mContext;
     private ArrayList<AnimalType> listRecycV;
 
-
     public RecyclerAdapterView(Context mContext, ArrayList<AnimalType> listRecycV) {
         this.mContext = mContext;
         this.listRecycV = listRecycV;
@@ -39,11 +38,8 @@ public class RecyclerAdapterView extends RecyclerView.Adapter<RecyclerAdapterVie
 
         holder.imageIcon.setImageBitmap(listRecycV.get(position).getIcon());
         holder.titleIcon.setText(listRecycV.get(position).getTitle());
-
         SharedPreferences pref = mContext.getSharedPreferences(MainActivity.SAVE_PREF_HEART_FLAG, Context.MODE_PRIVATE);
-
         String key = listRecycV.get(position).getTitle();
-
         String tagPref = pref.getString(key, null);
 
         /**
@@ -53,24 +49,18 @@ public class RecyclerAdapterView extends RecyclerView.Adapter<RecyclerAdapterVie
          * */
 
         if (tagPref == null) {
-
             holder.heart.setVisibility(View.GONE);
             listRecycV.get(position).setTag("nonefillcolor");
-
         } else if (tagPref.contains("filled")) {
-
             /** setVisibility()
              * View.GONE This view is invisible, and it doesn't take any space for layout purposes.
              * View.INVISIBLE This view is invisible, but it still takes up space for layout purposes.
              * View.VISIBLE This view is visible.
              * https://developer.android.com/reference/android/view/View#attr_android:visibility
              * */
-
             holder.heart.setVisibility(View.VISIBLE);
             listRecycV.get(position).setTag("filled");
-
         } else {
-
             holder.heart.setVisibility(View.GONE);
             listRecycV.get(position).setTag("nonefillcolor");
         }
@@ -89,17 +79,12 @@ public class RecyclerAdapterView extends RecyclerView.Adapter<RecyclerAdapterVie
 
             }
         });
-        /**
-         * hiển thị position của adapterview trong title của icon
-         * holder.titleIcon.setText(listRecycV.get(position).getTitle()+" "+position);
-         * */
     }
 
     @Override
     public int getItemCount() {
         return listRecycV.size();
     }
-
 
     public class MyHolder extends RecyclerView.ViewHolder {
         TextView titleIcon;

@@ -11,14 +11,16 @@ public class AnimalType {
     private Bitmap icon;
     private String tag;
     private String detail;
-    private  Bitmap imagedetail;
+    private Bitmap imagedetail;
+    private String iconBitmapPath;
 
-    public AnimalType(String title, Bitmap icon, String tag, String detail, Bitmap imagedetail) {
+    public AnimalType(String title, Bitmap icon, String iconBitmapPath, String tag, String detail, Bitmap imagedetail) {
         this.title = title;
         this.icon = icon;
         this.tag = tag;
         this.detail = detail;
         this.imagedetail = imagedetail;
+        this.iconBitmapPath = iconBitmapPath;
     }
 
     public String getTitle() {
@@ -43,5 +45,9 @@ public class AnimalType {
 
     public Bitmap getImagedetail() {
         return imagedetail;
+    }
+
+    public String getIconBitmapPath() {
+        return iconBitmapPath;
     }
 }

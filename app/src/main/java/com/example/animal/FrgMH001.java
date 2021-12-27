@@ -50,7 +50,6 @@ public class FrgMH001<AnimalType> extends Fragment implements View.OnClickListen
     private IconLayoutBinding iconLayoutBinding;
     private AppBarAndContentBinding appBarAndContentBinding;
     private RecycleViewItemAnimalBinding recycleViewItemAnimalBinding;
-
     private ArrayList<com.example.animal.AnimalType> iconList = new ArrayList<>();
 
     public void setAnimalTypeArrayList(ArrayList<com.example.animal.AnimalType> animalTypeArrayList) {
@@ -80,16 +79,12 @@ public class FrgMH001<AnimalType> extends Fragment implements View.OnClickListen
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         //lồng file icon_layout.xml vào view binding
         iconLayoutBinding = IconLayoutBinding.inflate(LayoutInflater.from(mContext), null, false);
-
         //lồng file drawer.xml vào container (container chính là thành phần LinearLayout R.id.ln_main) được truyền vào từ showfrg()
         drawerBinding = DrawerBinding.inflate(inflater, container, false);
-
         //lồng file app_bar_and_content.xml vào LinearLayout R.id.host_content_with_appbar
         appBarAndContentBinding = AppBarAndContentBinding.inflate(inflater, drawerBinding.hostContentWithAppbar, true);
-
         //lồng file recycle_view_item_animal.xml vào LinearLayout R.id.content_frg
         recycleViewItemAnimalBinding = RecycleViewItemAnimalBinding.inflate(LayoutInflater.from(mContext), appBarAndContentBinding.contentFrg, true);
 
@@ -141,12 +136,10 @@ public class FrgMH001<AnimalType> extends Fragment implements View.OnClickListen
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         // nếu xảy ra sự kiện click trên bugger button thì show Navigation
         if (toggle.onOptionsItemSelected(item)) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -174,22 +167,17 @@ public class FrgMH001<AnimalType> extends Fragment implements View.OnClickListen
                 break;
 
         }
-
         Toast.makeText(getActivity(), iconLayoutBinding.icon.getTag().toString(), Toast.LENGTH_SHORT).show();
         drawer.closeDrawer(GravityCompat.START);
     }
 
 
     private void recyclerV(ArrayList<com.example.animal.AnimalType> animalTypeArrayList) {
-
         RecyclerAdapterView adapter = new RecyclerAdapterView(mContext, animalTypeArrayList);
         RecyclerView recyclerView = recycleViewItemAnimalBinding.recycleViewIcon;
         recyclerView.removeAllViews();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 3, RecyclerView.VERTICAL, true);
-
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(gridLayoutManager);
-
-
     }
 }

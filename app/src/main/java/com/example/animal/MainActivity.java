@@ -6,6 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,20 +27,30 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String SAVE_PREF_HEART_FLAG = "heart_flag";
     public static final String SAVE_PREF_DIALOG_PHONE_NUMBER = "phone_number";
-    public static final int READ_PHONE_STATE_REQUEST_CODE = 101;
-    public static final int READ_CALL_LOG_REQUEST_CODE = 110;
+    private static final int READ_PHONE_STATE_REQUEST_CODE = 101;
+    private static final int READ_CALL_LOG_REQUEST_CODE = 110;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         checkPermission();
+        try{
+            // Khai báo Intent filter trong Receiver của fil Manifest
+            // và đăng ký nhận thông tin receiver khi có sự thay đổi của action PHONE_STATE trong intent filter
+            IntentFilter filter = new IntentFilter("android.intent.action.PHONE_STATE");
+            BroadcastReceiver receiver = new ServiceReceiver();
+            registerReceiver(receiver, filter);
+
+        }catch (Exception ignored){
+            Toast.makeText(this, "Exception at BroadcastReceiver", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
     }
 
-
+    // Phương thức kiểm tra user permission
     protected void checkPermission() {
 
         if (this.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -49,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    // Phương thức xử lý đồng ý hoặc từ chối permission requested
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -57,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
 
             case READ_PHONE_STATE_REQUEST_CODE:
-
                 if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     showFrg1();
                 } else {
@@ -67,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case READ_CALL_LOG_REQUEST_CODE:
-
                 if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     showFrg1();
                 } else {
@@ -100,11 +112,9 @@ public class MainActivity extends AppCompatActivity {
 
     // phương thức iconlist dùng để tạo ra danh sách animal gồm thông tin bitmap và titile của icon
     public ArrayList<com.example.animal.AnimalType> iconlist() {
-
         int[] animalGroupID = {R.string.folder_icon_bird, R.string.folder_icon_mammal, R.string.folder_icon_sea};
         String[] assetFileName;
         ArrayList<com.example.animal.AnimalType> animalTypeArrayList = new ArrayList<>();
-
         try {
             for (int idStringResource : animalGroupID) {
                 String assetFolderName = getString(idStringResource);
@@ -115,27 +125,22 @@ public class MainActivity extends AppCompatActivity {
                     //tên file có cấu trúc là ic_[filename].png
                     //Vì vậy title sẽ lấy subString từ index 3 đến index của phần tử dấu .
                     String title = imageFileName.substring(3, imageFileName.indexOf("."));
-
-                    //tạo path đến vị trí lưu file bitmap
-                    String path = assetFolderName + "/" + imageFileName;
-
+                    //tạo iconBitmapPath đến vị trí lưu file bitmap
+                    String iconBitmapPath = assetFolderName + "/" + imageFileName;
                     //input file bitmap icon
-                    Bitmap bitmapIcon = BitmapFactory.decodeStream(getApplicationContext().getAssets().open(path));
-
+                    Bitmap bitmapIcon = BitmapFactory.decodeStream(getApplicationContext().getAssets().open(iconBitmapPath));
                     //input file bitmap detail image
                     String pathDetailImage = "detail/photo/" + title + ".jpg";
                     Bitmap detailimage = BitmapFactory.decodeStream(getApplicationContext().getAssets().open(pathDetailImage));
-
                     //input detail content từ file .txt trong thư mục assets/detail/text/...
                     InputStream input = getApplicationContext().getAssets().open("detail/text/" + title + ".txt");
                     BufferedReader br = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
                     StringBuilder content = new StringBuilder();
-
                     String line;
                     while ((line = br.readLine()) != null) {
                         content.append(line).append("\n");
                     }
-                    animalTypeArrayList.add(new AnimalType(title, bitmapIcon, null, content.toString(), detailimage));
+                    animalTypeArrayList.add(new AnimalType(title, bitmapIcon, iconBitmapPath,null, content.toString(), detailimage));
                     br.close();
                 }
             }
