@@ -19,7 +19,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String SAVE_PREF = "save_pref";
+    public static final String SAVE_PREF_HEART_FLAG = "heart_flag";
+    public static final String SAVE_PREF_DIALOG_PHONE_NUMBER = "phone_number";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

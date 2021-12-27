@@ -40,7 +40,7 @@ public class RecyclerAdapterView extends RecyclerView.Adapter<RecyclerAdapterVie
         holder.imageIcon.setImageBitmap(listRecycV.get(position).getIcon());
         holder.titleIcon.setText(listRecycV.get(position).getTitle());
 
-        SharedPreferences pref = mContext.getSharedPreferences(MainActivity.SAVE_PREF, Context.MODE_PRIVATE);
+        SharedPreferences pref = mContext.getSharedPreferences(MainActivity.SAVE_PREF_HEART_FLAG, Context.MODE_PRIVATE);
 
         String key = listRecycV.get(position).getTitle();
 
@@ -52,7 +52,7 @@ public class RecyclerAdapterView extends RecyclerView.Adapter<RecyclerAdapterVie
          * ngoài ra thì ẩn icon heart
          * */
 
-	if (tagPref == null) {
+        if (tagPref == null) {
 
             holder.heart.setVisibility(View.GONE);
             listRecycV.get(position).setTag("nonefillcolor");

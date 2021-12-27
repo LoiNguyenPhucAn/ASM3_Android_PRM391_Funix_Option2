@@ -2,7 +2,6 @@ package com.example.animal;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 
@@ -36,15 +36,24 @@ public class MyViewPagerAdapter extends PagerAdapter {
         TextView text = v.findViewById(R.id.tv_detail_content_text);
         TextView title = v.findViewById(R.id.detail_title);
         ImageView heart = v.findViewById(R.id.heart_button);
+        ImageView phone = v.findViewById(R.id.phone_icon);
+        TextView tvPhoneNumber = v.findViewById(R.id.phone_number);
+
 
         image.setImageBitmap(animalInfo.getImagedetail());
         text.setText(animalInfo.getDetail());
         title.setText(animalInfo.getTitle());
 
-        if (animalInfo.getTag().equals("filled")){
+        if (animalInfo.getTag().equals("filled")) {
             heart.setImageDrawable(mContext.getDrawable(R.drawable.heart_button_filled));
-        }else{
+        } else {
             heart.setImageDrawable(mContext.getDrawable(R.drawable.heart_button));
+        }
+
+        SharedPreferences phoneNumberSharedPref = mContext.getSharedPreferences(MainActivity.SAVE_PREF_DIALOG_PHONE_NUMBER, Context.MODE_PRIVATE);
+        String fillPhoneNumber = phoneNumberSharedPref.getString(animalInfo.getTitle(), null);
+        if (animalInfo.getTitle()!=null){
+            tvPhoneNumber.setText(fillPhoneNumber);
         }
 
         container.addView(v);
@@ -63,7 +72,7 @@ public class MyViewPagerAdapter extends PagerAdapter {
         heart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences pref = mContext.getSharedPreferences(MainActivity.SAVE_PREF, Context.MODE_PRIVATE);
+                SharedPreferences pref = mContext.getSharedPreferences(MainActivity.SAVE_PREF_HEART_FLAG, Context.MODE_PRIVATE);
 
                 String tagPref = pref.getString(title.getText().toString(), null);
 
@@ -97,6 +106,19 @@ public class MyViewPagerAdapter extends PagerAdapter {
             }
         });
 
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // show dialog fragment from adapter
+                FragmentActivity activity = (FragmentActivity) (mContext);
+                FragmentManager fragManager = activity.getSupportFragmentManager();
+                DialogFrag dialogObject = new DialogFrag(mContext, animalInfo, position,tvPhoneNumber);
+                dialogObject.show(fragManager, "PhoneNumberDiaglogueFragment");
+            }
+        });
+
         return v;
     }
 
@@ -114,4 +136,5 @@ public class MyViewPagerAdapter extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
+
 }
