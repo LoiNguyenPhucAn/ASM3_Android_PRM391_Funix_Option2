@@ -1,15 +1,17 @@
 package com.example.animal;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,34 +23,82 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String SAVE_PREF_HEART_FLAG = "heart_flag";
     public static final String SAVE_PREF_DIALOG_PHONE_NUMBER = "phone_number";
+    public static final int READ_PHONE_STATE_REQUEST_CODE = 101;
+    public static final int READ_CALL_LOG_REQUEST_CODE = 110;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        showFrg1();
 
+        checkPermission();
 
     }
 
+
+    protected void checkPermission() {
+
+        if (this.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG}, READ_PHONE_STATE_REQUEST_CODE);
+        } else if (this.checkSelfPermission(Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CALL_LOG}, READ_CALL_LOG_REQUEST_CODE);
+        } else {
+            showFrg1();
+        }
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+
+            case READ_PHONE_STATE_REQUEST_CODE:
+
+                if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    showFrg1();
+                } else {
+                    Toast.makeText(this, "Please allow this permission to use features of the app", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+
+            case READ_CALL_LOG_REQUEST_CODE:
+
+                if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showFrg1();
+                } else {
+                    Toast.makeText(this, "Please allow this permission to use features of the app", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+        }
+
+    }
+
+    //Called when the activity has detected the user's press of the back key
     @Override
     public void onBackPressed() {
         showFrg1();
     }
 
+    // phương thức gọi hiển thị fragment FrgMH001
     public void showFrg1() {
         FrgMH001 frg1 = new FrgMH001();
         frg1.setAnimalTypeArrayList(iconlist());
         showFrg(frg1);
     }
 
+    // phương thức gọi fragment với hiệu ứng alpha
     public void showFrg(Fragment frg) {
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.alpha,R.anim.alpha).replace(R.id.ln_main, frg, null).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.alpha, R.anim.alpha).replace(R.id.ln_main, frg, null).commit();
     }
 
-    /**
-     * phương thức iconlist dùng để tạo ra danh sách animal gồm thông tin bitmap và titile của icon
-     */
+
+    // phương thức iconlist dùng để tạo ra danh sách animal gồm thông tin bitmap và titile của icon
     public ArrayList<com.example.animal.AnimalType> iconlist() {
 
         int[] animalGroupID = {R.string.folder_icon_bird, R.string.folder_icon_mammal, R.string.folder_icon_sea};
